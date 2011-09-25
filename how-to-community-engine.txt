@@ -1,0 +1,98 @@
+- follow the steps in the link
+http://github.com/bborn/communityengine
+  The short version is for ubuntu
+  rails commune -d mysql -m http://www.communityengine.org/install_template.rb
+- Make sure to install gem install rmagick -v 1.15.13
+- rake gems:install
+- vi database.yml and change password
+- rake db:create:all
+- script/generate plugin_migration
+- rake db:migrate
+- rake test
+- rake community_engine:test
+- open http://localhost:3000
+- register a user
+- copy/paste activation link 
+http://localhost:3000/users/activate/[activation code given in database]
+- go to database > table "users", then change role_id to "1" (this is admin)
+	1 - admin
+	2 - moderator
+	3 - member
+
+	
+For Windows,
+- execute rails your_app_name -d mysql -m http://www.communityengine.org/install_template.rb
+ (it will fail. don't worry. just continue)
+- Install Ruby development kit
+http://rubyinstaller.org/downloads/archives and download devkit-3.4.5r3-20091110.7z
+- Extract it using 7zip to C:\Ruby187 top directory
+- gem install hpricot (if not working, install 0.8.1)
+- gem install htmlentities
+- gem install haml aws-s3 calendar_date_select ri_cal authlogic searchlogic
+- download rmagick-win32 from http://rubyforge.org/projects/rmagick/
+RMagick-2.12.0-ImageMagick-6.5.6-8-Q8.zip
+- extract it under C:\Ruby187\temp
+- Double-click the ImageMagick installer (ImageMagick-6.5.6-8-Q8-windows-dll.exe) found in the temporary directory. The only option that you need to choose from the installation options is "Update executable search path." 
+- cd C:\Ruby187\temp; gem install rmagick --local
+- re-open powershell
+- cd C:\users\songserm\rubymineprojects\commune; 
+- rake gems:install
+- delete unnecessary files public/index.html and public/favicon.ico"
+- edit config/routes --add--> map.routes_from_plugin :community_engine
+  Note: there's a mismatch between community_engine and communityengine. change plugin folder to community_engine
+- check environment.rb for various places (refer to install_template.rb)
+- check environments/[development, test, production] for APP_URL 
+- check application.rb for community name
+- start xampp (apache & mysql)
+- ruby .\script\generate plugin_migration
+- (optional) restart the windows if still not working.
+- rake db:create:all --force
+- rake db:migrate
+- rake test
+- rake community_engine:test
+
+
+- when add acts_as_activity to a model, views/activities/_activity.html.haml, _icon.html.haml must be handled
+- Add comment: in model -> acts_as_commentable
+	def show
+		...
+		@comments = @box.comments.find(:all, :order => 'created_at DESC', :include => :user)
+	end
+	
+	in show.html.haml
+	 -box :class => 'hfeed comments', :id => 'comments' do  
+      %h3= "Box updates"
+      %h2= "Add your box update!"
+      %p= render :partial => 'comments/comment_form', :locals => {:commentable => @box}
+      %a#newest_comment
+      = render :partial => 'comments/comment', :collection => @comments
+      %span#more_comments_links= more_comments_links(@box)
+
+	  
+- (unsolved) modify plugins/community_engine/config/application.yml (it's still not working)
+	from 
+		sections_enabled: ['photos', 'posts', 'clippings', 'contests', 'categories', 'events']
+	to
+		sections_enabled: ['photos', 'categories', 'events']
+		
+- (unsolved) lang/ui/en.yml, change locale in "plugin" application.yml ==> community_locale: "en"
+- TinyMCE, add this line to controller   
+	uses_tiny_mce(:only => [:index, :new]) do
+		AppConfig.simple_mce_options  ;# or default_mce_options
+	end
+	
+	in _form.html.haml
+	%label
+		= "Item in the box"
+		= form.text_area :item, :rows => 12
+
+- To modify home, go to base/site_index
+- xxx.new_record? to check if the record exists in the database
+- screen.css is the CSS for community engine
+
+
+  	
+	
+	
+
+

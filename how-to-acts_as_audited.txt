@@ -1,0 +1,5 @@
+- install acts_as_audited
+- in a model, put something like "acts_as_audited :only => [:current_login_at, :avatar_file_name]"
+- in a controller (e.g. def show), put something like " @audits = @user.audits"
+- in a view like show.html.erb, <%= debug(@audits) %>
+- restart server, try to login/logout, change avatar and reload show page and see the audit trails

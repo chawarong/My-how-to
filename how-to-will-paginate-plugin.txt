@@ -1,0 +1,28 @@
+cd /var/www/choicemaster
+./script/plugin install git://github.com/mislav/will_paginate.git
+ls vender/plugins
+./script/console ;# to verify
+> @topics = Topic.paginate :page => 1
+> [you should see some output]
+
+# now you want to use it in topic controller
+vi topics_controller.rb
+def index
+   @topics = Topic.paginate :page => params[:page], :per_page => 3
+end
+
+vi topics/index.html.erb
+<% will_paginate @topics %>  ;# just add this line
+
+Note: for rails3 on Rubymine 
+- attach git to rubymine first
+- install git for windows, select run Git on Windows Command Prompt
+- then, use --> rails plugin install git://github.com/mislav/will_paginate.git  -r 'rails3' --force
+
+acts_as_taggable_on_steroids
+./script/plugin install git://github.com/jviney/acts_as_taggable_on_steroids.git
+./script/generate acts_as_taggable_migration
+rake db:migrate
+
+(read books)
+
